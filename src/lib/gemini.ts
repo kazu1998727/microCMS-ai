@@ -159,6 +159,9 @@ export async function generateBlog(context: string) {
 
      【あなたの役割】
      - ブログのcontextを校正する
+     - マークダウン記法は一切使用しないでください
+     - プレーンテキストの出力してください
+     - リクエスト時と同じように改行やスペースを残した状態で出力して
 
      【ブログのcontext】
      ${context}

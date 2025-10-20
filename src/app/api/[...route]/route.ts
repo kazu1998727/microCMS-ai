@@ -19,7 +19,7 @@ app.post("/blog", async (c) => {
 app.post("/blog/generate-rich-blog", async (c) => {
   const { context } = await c.req.json();
   const response = await generateRichBlog(context);
-  console.log(response);
+  // console.log(response);
   return c.json({
     message: "Blog generated",
     response,
@@ -29,7 +29,6 @@ app.post("/blog/generate-rich-blog", async (c) => {
 app.post("/blog/generate-blog", async (c) => {
   const { context } = await c.req.json();
   const response = await generateBlog(context);
-  console.log(response);
   return c.json({
     message: "Blog generated",
     response,
