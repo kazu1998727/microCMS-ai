@@ -170,6 +170,7 @@ export async function generateBlog(context: string) {
      - ブログのcontextを校正する
      - 文章は大きく変更しない
      - 整える程度で良い
+     - 誤字脱字は修正してください
 
      `;
 

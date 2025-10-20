@@ -24,7 +24,9 @@ const insertBlogAction = async (formData: FormData) => {
   // console.log("送信するリクエストボディ:", requestBody);
 
   const response = await fetch(
-    `https://${process.env.MICROCMS_SERVICE_DOMAIN!}.microcms.io/api/v1/blog`,
+    `https://${process.env
+      .MICROCMS_SERVICE_DOMAIN!}.microcms.io/api/v1/blog?status=${process.env
+      .MICROCMS_SERVICE_DOMAIN!}`,
     {
       method: "POST",
       body: JSON.stringify(requestBody),
