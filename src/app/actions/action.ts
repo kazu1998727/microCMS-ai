@@ -1,5 +1,7 @@
 "use server";
 
+import updateBlogStatustoDraft from "@/lib/microCMS";
+
 // src/app/actions/action.ts の修正
 
 const insertBlogAction = async (formData: FormData) => {
@@ -7,7 +9,7 @@ const insertBlogAction = async (formData: FormData) => {
   const context = formData.get("context");
 
   // console.log("送信データ:", { title, context });
-  
+
   if (!title || !context) {
     throw new Error("タイトルとコンテンツは必須です");
   }
@@ -16,17 +18,12 @@ const insertBlogAction = async (formData: FormData) => {
   const requestBody = {
     title: title.toString(),
     content: context.toString(),
-    // 必要に応じて他のフィールドも追加
-    // status: "DRAFT", // 下書きとして保存する場合
-    // publishedAt: new Date().toISOString(), // 公開日時
   };
 
   // console.log("送信するリクエストボディ:", requestBody);
 
   const response = await fetch(
-    `https://${process.env
-      .MICROCMS_SERVICE_DOMAIN!}.microcms.io/api/v1/blog?status=${process.env
-      .MICROCMS_SERVICE_DOMAIN!}`,
+    `https://${process.env.MICROCMS_SERVICE_DOMAIN!}.microcms.io/api/v1/blog`,
     {
       method: "POST",
       body: JSON.stringify(requestBody),
@@ -45,10 +42,23 @@ const insertBlogAction = async (formData: FormData) => {
   }
 
   const data = await response.json();
+
+  const id = await data.id;
+
+  //ブログのステータスを下書きに変更
+  try {
+    const responseDraft = await updateBlogStatustoDraft(id);
+    console.log("ステータス更新成功:", responseDraft);
+  } catch (error) {
+    console.error("ステータス更新エラー:", error);
+    // ステータス更新に失敗しても、ブログの作成は成功しているので警告のみ
+    console.warn("ブログは作成されましたが、ステータスの更新に失敗しました");
+  }
+
   return data;
 };
 
-const generateRichBlogAction = async (context:string) => {
+const generateRichBlogAction = async (context: string) => {
   // const context = formData.get("context");
   const response = await fetch(
     `http://localhost:3000/api/blog/generate-rich-blog`,
